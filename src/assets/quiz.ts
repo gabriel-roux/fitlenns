@@ -461,13 +461,13 @@ export const quiz = [
     title: "Qual o seu peso atual?",
     description:
       "Saber seu peso nos ajuda a <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>calcular seu IMC</span>.",
-    question: "Insira o peso que você deseja alcançar:",
     useWeightRuler: true,
   },
   {
     title: "Qual é o seu objetivo?",
     description:
       "Nós <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>personalizaremos seu plano nutricional</span> para guiá-lo em direção aos seus objetivos!",
+    question: "Insira o peso que você deseja alcançar:",
     useWeightRuler: true,
   },
 ];

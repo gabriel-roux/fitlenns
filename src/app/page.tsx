@@ -81,7 +81,7 @@ export default function Quiz() {
     if (currentQuiz.options) {
       setTimeout(() => {
         if (value !== "others") setCurrentStep(currentStep + 1);
-      }, 500);
+      }, 200);
     }
   };
 
