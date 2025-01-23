@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { quiz } from "@/assets/quiz";
 import FitLenns from "@/assets/fitlens-logo.svg";
@@ -13,6 +13,8 @@ import * as RadioGroup from "@radix-ui/react-radio-group";
 import { GradientButton } from "@/components/button";
 import { SliderWithRuler } from "@/components/ruler";
 import { SliderWithWeightRuler } from "@/components/weight-ruler";
+import { ImageCard } from "@/components/image";
+import { VideoCard } from "@/components/video";
 
 interface Answer {
   [key: string]: string[]; // Todas as respostas são arrays para suportar múltiplas seleções
@@ -23,32 +25,10 @@ export default function Quiz() {
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Answer>({});
   const totalSteps = quiz.length;
+  const currentQuiz = quiz[currentStep];
 
-  const handleOptionChange = (value: string) => {
-    setAnswers({
-      ...answers,
-      [String(quiz[currentStep].title)]: [value],
-    });
-  };
-
-  const handleCheckboxChange = (value: string, checked: boolean) => {
-    const title = quiz[currentStep].title;
-    const currentAnswers = answers[title!] || [];
-
-    if (checked) {
-      setAnswers({
-        ...answers,
-        [title!]: [...currentAnswers, value],
-      });
-    } else {
-      setAnswers({
-        ...answers,
-        [title!]: currentAnswers.filter((item) => item !== value),
-      });
-    }
-  };
-
-  const handleNext = () => {
+  // Função para avançar para a próxima etapa com debounce de 500ms
+  const handleNext = useCallback(() => {
     // Validação: Verifica se pelo menos uma opção foi selecionada
     if (currentQuiz.title) {
       if (currentQuiz.select) {
@@ -81,6 +61,49 @@ export default function Quiz() {
       localStorage.setItem("quizAnswers", JSON.stringify(answers));
       router.push("/results");
     }
+  }, [
+    currentStep,
+    totalSteps,
+    answers,
+    currentQuiz.title,
+    currentQuiz.select,
+    currentQuiz.options,
+    router,
+  ]);
+
+  const handleOptionChange = (value: string) => {
+    setAnswers({
+      ...answers,
+      [String(currentQuiz.title)]: [value],
+    });
+
+    // Se 'options' existir, avançar automaticamente após 500ms
+    if (currentQuiz.options) {
+      setTimeout(() => {
+        if (value !== "others") setCurrentStep(currentStep + 1);
+      }, 500);
+    }
+  };
+
+  const handleCheckboxChange = (value: string, checked: boolean) => {
+    const title = currentQuiz.title;
+    const currentAnswers = answers[title!] || [];
+
+    if (checked) {
+      setAnswers({
+        ...answers,
+        [title!]: [...currentAnswers, value],
+      });
+    } else {
+      setAnswers({
+        ...answers,
+        [title!]: currentAnswers.filter((item) => item !== value),
+      });
+    }
+  };
+
+  const handleManualNext = () => {
+    handleNext();
   };
 
   const handleBack = () => {
@@ -89,7 +112,6 @@ export default function Quiz() {
     }
   };
 
-  const currentQuiz = quiz[currentStep];
   const progressPercentage = ((currentStep + 1) / totalSteps) * 100;
 
   // Definição das variantes de animação
@@ -98,6 +120,10 @@ export default function Quiz() {
     animate: { opacity: 1, y: 0 },
     exit: { opacity: 0, y: -20 },
   };
+
+  // Determinar se o GradientButton deve ser exibido
+  const shouldShowButton =
+    currentQuiz.select || (!currentQuiz.select && !currentQuiz.options);
 
   return (
     <div className="max-w-[595px] mx-auto py-4 px-4">
@@ -111,7 +137,7 @@ export default function Quiz() {
       {/* Texto de Progresso */}
       <div className="w-full flex justify-start mt-2">
         <button
-          className={`flex items-center gap-1 text-lg font-semibold text-secondary font-montserrat ${
+          className={`flex items-center gap-1 text-base md:text-lg font-semibold text-secondary font-montserrat ${
             currentStep === 0
               ? "opacity-50 cursor-not-allowed"
               : "hover:opacity-80"
@@ -124,19 +150,19 @@ export default function Quiz() {
             alt="Voltar"
             width={24}
             height={24}
-            className="w-[24px] h-[24px]"
+            className="w-[20px] h-[20px] md:w-[24px] md:h-[24px]"
           />
           Voltar
         </button>
       </div>
-
+  
       <div className="flex flex-col items-center justify-center gap-6 mt-3">
         <Image
           src={FitLenns}
           alt="FitLenns"
           width={72}
           height={72}
-          className="w-[72px] h-[72px]"
+          className="w-[56px] h-[56px] md:w-[72px] md:h-[72px]"
         />
         <div className="flex flex-col items-center gap-4 w-full min-h-[100px]">
           {/* Conteúdo Dinâmico com Animação */}
@@ -151,20 +177,20 @@ export default function Quiz() {
               transition={{ duration: 0.5 }}
             >
               {/* Título */}
-              <h1 className="text-2xl text-[28px] font-semibold text-center font-montserrat">
+              <h1 className="text-xl md:text-2xl lg:text-[28px] font-semibold text-center font-montserrat">
                 {currentQuiz.title}
               </h1>
               {/* Descrição */}
               {currentQuiz.description && (
                 <p
-                  className="text-xl text-center font-light font-montserrat"
+                  className="text-sm md:text-base lg:text-xl text-center font-light font-montserrat"
                   dangerouslySetInnerHTML={{ __html: currentQuiz.description }}
                 />
               )}
             </motion.div>
           </AnimatePresence>
         </div>
-
+  
         {/* Pergunta e Opções com Animação */}
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
@@ -176,14 +202,36 @@ export default function Quiz() {
             exit="exit"
             transition={{ duration: 0.5 }}
           >
-            <p className="text-lg font-montserrat font-medium mb-4">
+            {currentQuiz.image && (
+              <div className="w-full flex justify-center">
+                {currentQuiz.isFeedback ? (
+                  <Image
+                    src={currentQuiz.image.src}
+                    alt="Feedback"
+                    width={615}
+                    height={540}
+                    quality={100}
+                    className="w-full max-h-[360px] md:max-h-[480px] mb-8"
+                  />
+                ) : (
+                  <ImageCard background={currentQuiz.image.src} />
+                )}
+              </div>
+            )}
+  
+            {currentQuiz.video && (
+              <div className="w-full flex justify-center">
+                <VideoCard background={currentQuiz.video.src} />
+              </div>
+            )}
+            <p className="text-sm md:text-lg font-montserrat font-medium mb-4">
               {currentQuiz.question}
             </p>
-
+  
             {currentQuiz.useRuler && <SliderWithRuler />}
-
+  
             {currentQuiz.useWeightRuler && <SliderWithWeightRuler />}
-
+  
             {/* Opções de Checkbox */}
             {currentQuiz.select && (
               <div
@@ -210,7 +258,7 @@ export default function Quiz() {
                 ))}
               </div>
             )}
-
+  
             {/* Opções de Radio */}
             {currentQuiz.options && (
               <RadioGroup.Root
@@ -234,49 +282,6 @@ export default function Quiz() {
                             : false
                         }
                       />
-                      {option.value === "others" &&
-                        answers[currentQuiz.title!]?.[0] === "others" && (
-                          <div className="relative p-[2px] rounded-md group">
-                            {/* Camada de borda com gradiente azul */}
-                            <div
-                              className="
-                              absolute inset-0 rounded-md bg-gradient-to-r from-azul-start to-azul-end
-                              opacity-30
-                              transition-opacity duration-300
-                              pointer-events-none
-                              group-focus-within:opacity-100
-                            "
-                            ></div>
-
-                            {/* Input animado */}
-                            <motion.input
-                              key={`${currentStep}-input`}
-                              type="text"
-                              placeholder="Outro (especifique)"
-                              value={answers[currentQuiz.title!]?.[1] || ""}
-                              onChange={(e) =>
-                                setAnswers({
-                                  ...answers,
-                                  [currentQuiz.title!]: [
-                                    "others",
-                                    e.target.value,
-                                  ],
-                                })
-                              }
-                              className="
-                              w-full p-4 bg-white focus:bg-opacity-90 border border-transparent rounded-md
-                              focus:outline-none focus:ring-0
-                              relative
-                              z-10
-                            "
-                              variants={variants}
-                              initial="initial"
-                              animate="animate"
-                              exit="exit"
-                              transition={{ duration: 0.5 }}
-                            />
-                          </div>
-                        )}
                     </Fragment>
                   )
                 )}
@@ -284,11 +289,17 @@ export default function Quiz() {
             )}
           </motion.div>
         </AnimatePresence>
-
-        {/* Botão Próximo */}
-        <GradientButton onClick={handleNext}>
-          {currentStep < totalSteps - 1 ? "Continuar" : "Finalizar"}
-        </GradientButton>
+  
+        {/* Botão Próximo Condicional */}
+        {shouldShowButton && (
+          <GradientButton onClick={handleManualNext}>
+            {currentStep < totalSteps - 1
+              ? currentQuiz.startQuiz
+                ? "Ir para o Quizz"
+                : "Continuar"
+              : "Finalizar"}
+          </GradientButton>
+        )}
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import * as Checkbox from "@radix-ui/react-checkbox";
-import { CheckIcon } from "@radix-ui/react-icons"; // Importação opcional para ícone de check
+import { CheckIcon } from "@radix-ui/react-icons";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface CheckboxCardProps {
@@ -18,7 +18,7 @@ export function CheckboxCard({
   onChange,
 }: CheckboxCardProps) {
   return (
-    <div className="relative p-[2px] rounded-lg">
+    <div className="relative p-[2px] rounded-lg w-full">
       {/* Camada de borda gradient */}
       <div
         className={`
@@ -33,7 +33,7 @@ export function CheckboxCard({
         className={`
           relative 
           ${selected ? "bg-white/90" : "bg-white"} 
-          rounded-md 
+          rounded-lg 
           p-4 
           flex 
           items-center 
@@ -51,21 +51,21 @@ export function CheckboxCard({
               onChange(value, checked as boolean);
             }
           }}
-          className="
+          className={`
             relative
-            w-6 h-6
+            w-5 h-5 sm:w-6 sm:h-6
             cursor-pointer
             rounded-md
             bg-gradient-to-r from-azul-start to-azul-end 
             p-[1px]
             flex
-            items-center
             flex-shrink-0
+            items-center
             justify-center
             border-2 border-transparent 
             hover:bg-azul-start/20
             transition-all duration-300
-          "
+          `}
         >
           {/* Camada interna para simular o fundo branco */}
           <div className="w-full h-full bg-white rounded-sm flex items-center justify-center">
@@ -77,12 +77,12 @@ export function CheckboxCard({
                   exit={{ scale: 0 }}
                   transition={{ duration: 0.2 }}
                   className="
-                    size-full
+                    w-3 h-3 sm:w-4 sm:h-4
                     bg-gradient-to-b from-azul-start to-azul-end
                     flex items-center justify-center
                   "
                 >
-                  <CheckIcon className="w-8 h-8 text-white" />
+                  <CheckIcon className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -90,11 +90,14 @@ export function CheckboxCard({
         </Checkbox.Root>
         <label
           htmlFor={value}
-          className={`text-lg font-montserrat font-semibold leading-8 ${
-            selected
+          className={`
+            text-base sm:text-lg lg:text-xl
+            font-montserrat font-semibold 
+            leading-6 sm:leading-8
+            ${selected
               ? "bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent"
-              : "text-secondary"
-          }`}
+              : "text-secondary"}
+          `}
         >
           {option}
         </label>

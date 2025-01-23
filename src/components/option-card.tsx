@@ -12,7 +12,7 @@ export function OptionCard({
   option,
 }: OptionCardProps) {
   return (
-    <div className="relative p-[2px] rounded-lg">
+    <div className="relative p-[2px] rounded-lg w-full">
       {/* Camada de borda gradient */}
       <div
         className={`
@@ -27,7 +27,7 @@ export function OptionCard({
         className={`
           relative 
           ${selected ? " bg-white/90" : "bg-white"} 
-          rounded-md 
+          rounded-lg 
           p-4 
           flex 
           items-center 
@@ -40,40 +40,43 @@ export function OptionCard({
         <RadioGroup.Item
           value={value}
           id={value}
-          className="
+          className={`
             relative
-            w-6 h-6
+            w-5 h-5 sm:w-6 sm:h-6
             cursor-pointer
             rounded-full
             bg-gradient-to-r from-azul-start to-azul-end 
             p-[1px]
             flex
             items-center
-            flex-shrink-0
             justify-center
+            flex-shrink-0
             border-2 border-transparent 
             hover:bg-azul-start/20
             transition-all duration-300
-          "
+          `}
         >
           {/* Camada interna para simular o fundo branco */}
           <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
             <RadioGroup.Indicator
-              className="
-                w-3 h-3
+              className={`
+                w-2.5 h-2.5 sm:w-3 sm:h-3
                 rounded-full
                 bg-gradient-to-b from-azul-start to-azul-end
-              "
+              `}
             />
           </div>
         </RadioGroup.Item>
         <label
           htmlFor={value}
-          className={`text-lg font-montserrat font-semibold leading-8 ${
-            selected
+          className={`
+            text-base sm:text-lg lg:text-xl
+            font-montserrat font-semibold 
+            leading-6 sm:leading-8
+            ${selected
               ? "bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent"
-              : "text-secondary"
-          }`}
+              : "text-secondary"}
+          `}
         >
           {option}
         </label>

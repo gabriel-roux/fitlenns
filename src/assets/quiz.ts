@@ -1,8 +1,50 @@
+import PratoVerduras from '@/assets/verduras-prato.png'
+import MulherComPrato from '@/assets/mulher-com-prato.png'
+import AlimentosAlergicos from '@/assets/proibido-alimentos.png'
+import Feedback from '@/assets/feedback.png'
+import Video1 from '@/assets/videos/video1.gif'
+import Video2 from '@/assets/videos/video2.gif'
+import Video3 from '@/assets/videos/video3.gif'
+import Video4 from '@/assets/videos/video4.gif'
+import Video5 from '@/assets/videos/video5.gif'
+
 export const quiz = [
+  {
+    title: 'Alcance o corpo dos seus sonhos sem esforço!',
+    description: "<span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>FitLens AI</span> reconhece instantaneamente sua comida e monitora calorias, com apenas uma foto voce pode ganhar ou perder peso com precisão e rapidez.",
+    loadQuiz: true,
+    video: Video1,
+  },
+  {
+    title: 'Facilite o rastreamento de calorias com IA',
+    description: "Acompanhe suas <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>metas de peso</span> com precisão e simplicidade, alimentadas por <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>inteligência artificial</span>.",
+    video: Video2,
+  },
+  {
+    title: 'Basta tirar uma foto da sua comida',
+    description: "Deixe que a inteligência artificial <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>identifique e registre</span> automaticamente <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>suas refeições</span>.",
+    video: Video3,
+  },
+  {
+    title: 'Então deixe o resto com a gente',
+    description: "Nossa inteligência artificial cuidará do restante, garantindo <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>precisão e eficiência</span> no <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>rastreamento de suas calorias.</span>",
+    video: Video4,
+  },
+  // {
+  //   title: 'Acompanhe seu progresso conforme avança',
+  //   description: "Monitore <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>cada etapa da sua jornada</span> com insights detalhados e motivação contínua.",
+  // },
+  {
+    title: 'Quase lá!',
+    description: "Antes de acessar o aplicativo, responda algumas perguntas e <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>ganhe um plano de dieta personalizado para você.</span> Vamos começar!",
+    startQuiz: true,
+    video: Video5,
+  },
   {
     title: "Qual é o seu objetivo hoje?",
     description:
       "Queremos ajudá-lo a <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>alcançar seus objetivos</span> de forma eficiente.",
+      image: PratoVerduras,
     question: "Escolha a opção que melhor se adapta a você:",
     options: [
       {
@@ -31,6 +73,7 @@ export const quiz = [
     title: "Sua dieta, organizada e eficiente, sem esforço",
     description:
       "Ótimo! Para deixar sua experiencia com o <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>FitLens</span> ainda mais unica, precisamos entender mais sobre sua rotina.",
+    image: MulherComPrato,
     question: "Selecione a opção que melhor descreve sua rotina diária:",
     options: [
       {
@@ -134,6 +177,7 @@ export const quiz = [
     title: "Alguma alergia alimentar?",
     description:
       "Ao compartilhar suas alergias alimentares, podemos <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>adaptar seu plano nutricional</span> de acordo.",
+    image: AlimentosAlergicos,
     question: "Selecione uma opção abaixo:",
     options: [
       {
@@ -259,6 +303,8 @@ export const quiz = [
   {
     title:
       "Seguir um plano pode ser desafiador, mas com o Fit Lens, é muito mais fácil!",
+    image: Feedback,
+    isFeedback: true,
   },
   {
     title: "Número preferido de refeições por dia",
