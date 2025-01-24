@@ -142,6 +142,7 @@ export default function ResultPage() {
 
                 <div className="mt-4 w-full">
                   <GradientButton
+                    id='final-1'
                     onClick={() => {
                       setGotoCheckout(true);
                     }}
@@ -175,6 +176,7 @@ export default function ResultPage() {
 
                 <div className="mt-4 w-full">
                   <GradientButton
+                    id="final-2"
                     onClick={() => {
                       window.location.href = "https://pay.oasispay.co/9GBPP8"
                     }}
