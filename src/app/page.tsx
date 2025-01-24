@@ -284,9 +284,6 @@ export default function Quiz() {
                     [currentQuiz.title!]: (value as unknown) as string[],
                   }));
                 }}
-                targetWeight={
-                  Number(answers[quiz[currentStep - 1].title!]?.[0]) || 0
-                }
               />
             )}
 
