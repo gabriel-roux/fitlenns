@@ -360,7 +360,7 @@ export default function Quiz() {
       {/* Botão Próximo Condicional */}
       <div className="w-full max-w-[595px] mx-auto py-4 px-4">
         {shouldShowButton && (
-          <GradientButton onClick={handleManualNext}>
+          <GradientButton id={currentQuiz.title} onClick={handleManualNext}>
             {currentStep < totalSteps - 1
               ? currentQuiz.startQuiz
                 ? "Ir para o Quizz"

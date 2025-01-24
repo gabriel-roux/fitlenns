@@ -122,11 +122,11 @@ export const quiz = [
     options: [
       {
         label: "👍 Sim",
-        value: "yes",
+        value: "yes-1",
       },
       {
         label: "👎 Não",
-        value: "no",
+        value: "no-1",
       },
     ],
   },
@@ -143,11 +143,11 @@ export const quiz = [
     options: [
       {
         label: "👍 Sim",
-        value: "yes",
+        value: "yes-2",
       },
       {
         label: "👎 Não",
-        value: "no",
+        value: "no-2",
       },
     ],
   },
@@ -180,11 +180,11 @@ export const quiz = [
     options: [
       {
         label: "👍 Sim",
-        value: "yes",
+        value: "yes-3",
       },
       {
         label: "👎 Não",
-        value: "no",
+        value: "no-3",
       },
     ],
   },
@@ -243,11 +243,11 @@ export const quiz = [
     options: [
       {
         label: "👍 Sim",
-        value: "yes",
+        value: "yes-4",
       },
       {
         label: "👎 Não",
-        value: "no",
+        value: "no-4",
       },
     ],
   },
@@ -401,7 +401,7 @@ export const quiz = [
     options: [
       {
         label: "👍 Sim, isso seria muito útil.",
-        value: "yes",
+        value: "yes-5",
       },
       {
         label: "😐 Talvez, dependendo de como o alerta é feito.",
@@ -409,7 +409,7 @@ export const quiz = [
       },
       {
         label: "👎 Não, prefiro controlar isso sozinho.",
-        value: "no",
+        value: "no-5",
       },
     ],
   },
