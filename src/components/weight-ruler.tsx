@@ -1,13 +1,18 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import React, { useState, useRef, useEffect } from "react";
 import * as Radio from "@radix-ui/react-radio-group";
 import { OptionCard } from "./option-card";
 
-export const SliderWithWeightRuler = () => {
+interface SliderWithWeightRulerProps {
+  lastValue: number;
+  onValueChange: (value: number) => void;
+}
+
+export const SliderWithWeightRuler = ({ lastValue, onValueChange }: SliderWithWeightRulerProps) => {
   const [value, setValue] = useState(71); // Valor inicial como número (kg)
   const [unit, setUnit] = useState("kg"); // Unidade inicial
-  const MAX = 164; // Valor máximo (kg)
-  const MIN = 55; // Valor mínimo (kg)
+  const MAX = 300; // Valor máximo (kg)
+  const MIN = 0; // Valor mínimo (kg)
   const STEP = 1;
 
   const rulerRef = useRef<HTMLDivElement>(null);
@@ -16,22 +21,22 @@ export const SliderWithWeightRuler = () => {
   const startValue = useRef(value);
 
   // Função para lidar com o início do arrasto
-  const handleMouseDown = (e: any) => {
+  const handleMouseDown = (e: React.MouseEvent | React.TouchEvent) => {
     isDragging.current = true;
-    startX.current = e.clientX || (e.touches && e.touches[0].clientX);
+    const clientX = 'clientX' in e ? e.clientX : e.touches[0].clientX;
+    startX.current = clientX;
     startValue.current = value;
     // Evitar seleção de texto durante o arrasto
     e.preventDefault();
   };
 
   // Função para lidar com o movimento do mouse durante o arrasto
-  const handleMouseMove = (e: any) => {
+  const handleMouseMove = (clientX: number) => {
     if (!isDragging.current) return;
 
-    const clientX = e.clientX !== undefined ? e.clientX : e.touches[0].clientX;
     const deltaX = clientX - startX.current;
 
-    const rulerWidth = rulerRef?.current?.offsetWidth || 0;
+    const rulerWidth = rulerRef.current?.offsetWidth || 0;
     const totalSteps = MAX - MIN;
     const stepPerPixel = totalSteps / rulerWidth;
 
@@ -43,6 +48,7 @@ export const SliderWithWeightRuler = () => {
     if (newValue > MAX) newValue = MAX;
 
     setValue(newValue);
+    onValueChange(newValue); // Notificar o componente pai
   };
 
   // Função para lidar com o término do arrasto
@@ -52,7 +58,10 @@ export const SliderWithWeightRuler = () => {
 
   // Adicionar event listeners para mouse e touch
   useEffect(() => {
-    const handleMove = (e: any) => handleMouseMove(e);
+    const handleMove = (e: MouseEvent | TouchEvent) => {
+      const clientX = 'clientX' in e ? e.clientX : e.touches[0].clientX;
+      handleMouseMove(clientX);
+    };
     const handleUp = () => handleMouseUp();
 
     window.addEventListener("mousemove", handleMove);
@@ -69,7 +78,7 @@ export const SliderWithWeightRuler = () => {
   }, [value]);
 
   // Função para converter entre kg e lb
-  const convertValue = (val: number, toUnit: string): number => {
+  const convertValue = (val: number, toUnit: "kg" | "lb"): number => {
     if (toUnit === "lb") {
       return parseFloat((val * 2.20462).toFixed(1)); // kg para lb
     } else {
@@ -92,6 +101,19 @@ export const SliderWithWeightRuler = () => {
       // Calcula a posição relativa do tick em relação ao valor atual
       const relativePosition = (i - value) * 25; // Ajuste o multiplicador conforme necessário
 
+      // DEFINE A COR DOS TICKS BASEADO NA POSIÇÃO RELATIVA AO OBJETIVO E ao lastValue
+      let tickColor = "#DCF5FC"; // Cor padrão
+
+      if (lastValue < value) { // Ganho de peso: colorir de verde da posição do lastValue até o objetivo
+        if (i >= lastValue && i <= value) {
+          tickColor = "#0fe082"; // Verde
+        }
+      } else if (lastValue > value) { // Perda de peso: colorir de vermelho da posição do lastValue até o objetivo
+        if (i <= lastValue && i >= value) {
+          tickColor = "#ff1d1d"; // Vermelho
+        }
+      }
+
       ticks.push(
         <div
           key={i}
@@ -102,11 +124,11 @@ export const SliderWithWeightRuler = () => {
             width: "3.16px",
             height: isMajor ? "87px" : "44px", // Traço grande ou pequeno
             borderRadius: "4px",
-            backgroundColor: "#DCF5FC",
+            backgroundColor: tickColor, // COR DOS TICKS
             position: "absolute",
             left: "50%",
             transform: `translateX(${relativePosition}px)`,
-            transition: "transform 0.1s linear",
+            transition: "transform 0.1s linear, background-color 0.3s",
           }}
         >
           {/* Linha do tick */}
@@ -114,7 +136,7 @@ export const SliderWithWeightRuler = () => {
             style={{
               width: "100%",
               height: "100%",
-              backgroundColor: "#DCF5FC",
+              backgroundColor: tickColor, // COR DA LINHA
             }}
           ></div>
           {/* Legenda do tick */}
@@ -137,19 +159,23 @@ export const SliderWithWeightRuler = () => {
   };
 
   return (
-    <div style={{ textAlign: "center", userSelect: "none" }}>
+    <div style={{ textAlign: "center", userSelect: "none", position: "relative" }}>
       {/* Seleção da unidade */}
       <Radio.Root
         value={unit}
         onValueChange={(val) => {
-          setUnit(val);
+          setUnit(val as "kg" | "lb");
 
           // Ajustar o valor para a nova unidade
           setValue((prev) => {
             if (val === "lb") {
-              return Math.round(convertValue(prev, "lb"));
+              const converted = Math.round(convertValue(prev, "lb"));
+              onValueChange(converted);
+              return converted;
             } else {
-              return Math.round(convertValue(prev, "kg"));
+              const converted = Math.round(convertValue(prev, "kg"));
+              onValueChange(converted);
+              return converted;
             }
           });
         }}
@@ -204,7 +230,7 @@ export const SliderWithWeightRuler = () => {
             top: "25px",
             left: "50%",
             transform: "translateX(-1.5px)", // Metade da largura do tick
-            width: "3px",
+            width: "5px",
             height: "100px",
             zIndex: 10,
           }}

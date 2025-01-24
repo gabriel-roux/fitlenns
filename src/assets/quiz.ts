@@ -7,6 +7,8 @@ import Video2 from "@/assets/videos/video2.gif";
 import Video3 from "@/assets/videos/video3.gif";
 import Video4 from "@/assets/videos/video4.gif";
 import Video5 from "@/assets/videos/video5.gif";
+import ConfiraBg from "@/assets/confira-bg.png";
+import ChartBg from "@/assets/chart-bg.png";
 
 export const quiz = [
   {
@@ -157,11 +159,6 @@ export const quiz = [
     title: "Defina sua dieta",
     description:
       "Saber o tipo da sua dieta nos ajuda a <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>personalizar um plano com base nas suas necessidades</span> e preferências alimentares.",
-  },
-  {
-    title: "Você acha difícil manter uma rotina alimentar consistente?",
-    description:
-      "Fazer lanches fora das refeições regulares é comum e <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>pode te impedir de alcançar</span> seus objetivos.",
     question: "Selecione uma opção abaixo:",
     options: [
       {
@@ -340,6 +337,7 @@ export const quiz = [
     title: "Confira isso!",
     description:
       "O Fit Lens <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>calcula e organiza</span> todas as calorias e nutrientes que você consome <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>ao longo do dia!</span>",
+    coveredImage: ConfiraBg,
   },
   {
     title: "Qual é o seu nível de atividade física?",
@@ -422,6 +420,7 @@ export const quiz = [
   {
     title:
       "Com o Fit Lens, você pode acompanhar seu progresso com gráficos e relatórios.",
+    coveredImage: ChartBg,
   },
   {
     title: "Qual é a sua idade?",

@@ -9,9 +9,12 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/components/card";
 import { GradientButton } from "@/components/button";
+import { VideoCard } from "@/components/video";
+import Video1 from "@/assets/videos/video1.gif";
 
 export default function ResultPage() {
   const [gotoPitch, setGotoPitch] = useState(false);
+  const [gotoCheckout, setGotoCheckout] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -94,52 +97,87 @@ export default function ResultPage() {
         <div className="flex flex-col items-center gap-4 w-full min-h-[100px]">
           {/* Conteúdo Dinâmico com Animação */}
           <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              className="flex flex-col items-center gap-4 w-full"
-              variants={variants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={{ duration: 0.5 }}
-            >
-              {/* Título */}
-              <h1 className="text-2xl text-[28px] font-semibold text-center font-montserrat">
-                <span className="bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold">
-                  Parabéns!
-                </span>{" "}
-                Seu plano alimentar personalizado está pronto!
-              </h1>
-              {/* Descrição */}
-              <p className="text-xl text-center font-light font-montserrat">
-                Com o Fit Lens, você pode acompanhar suas refeições e receber um
-                plano de dieta personalizado adaptado à sua rotina. Deixe o
-                resto com a gente!
-              </p>
+            {!gotoCheckout ? (
+              <motion.div
+                className="flex flex-col items-center gap-4 w-full"
+                variants={variants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                transition={{ duration: 0.5 }}
+              >
+                {/* Título */}
+                <h1 className="text-2xl text-[28px] font-semibold text-center font-montserrat">
+                  <span className="bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold">
+                    Parabéns!
+                  </span>{" "}
+                  Seu plano alimentar personalizado está pronto!
+                </h1>
+                {/* Descrição */}
+                <p className="text-xl text-center font-light font-montserrat">
+                  Com o Fit Lens, você pode acompanhar suas refeições e receber
+                  um plano de dieta personalizado adaptado à sua rotina. Deixe o
+                  resto com a gente!
+                </p>
 
-              <div className="flex flex-col items-center gap-4 w-full">
-                <Card
-                  title="O que você faz:"
-                  values={[
-                    "📸 Digitalize suas refeições com uma única foto.",
-                    "📊 Acompanhe calorias e nutrientes instantaneamente.",
-                    "📅 Monitore seus hábitos alimentares diários com facilidade.",
-                  ]}
-                />
-                <Card
-                  title="O que fazemos por você:"
-                  values={[
-                    "👩‍⚕️ Um nutricionista virtual no seu bolso.",
-                    "📈 Atualizações diárias de dieta alimentadas por IA.",
-                    "🚀 Acelere e otimize o seu progresso.",
-                  ]}
-                  transparentBackground
-                />
-              </div>
+                <div className="flex flex-col items-center gap-4 w-full">
+                  <Card
+                    title="O que você faz:"
+                    values={[
+                      "📸 Digitalize suas refeições com uma única foto.",
+                      "📊 Acompanhe calorias e nutrientes instantaneamente.",
+                      "📅 Monitore seus hábitos alimentares diários com facilidade.",
+                    ]}
+                  />
+                  <Card
+                    title="O que fazemos por você:"
+                    values={[
+                      "👩‍⚕️ Um nutricionista virtual no seu bolso.",
+                      "📈 Atualizações diárias de dieta alimentadas por IA.",
+                      "🚀 Acelere e otimize o seu progresso.",
+                    ]}
+                    transparentBackground
+                  />
+                </div>
 
-              <div className="mt-4 w-full">
-                <GradientButton>Começar Agora</GradientButton>
-              </div>
-            </motion.div>
+                <div className="mt-4 w-full">
+                  <GradientButton
+                    onClick={() => {
+                      setGotoCheckout(true);
+                    }}
+                  >
+                    Começar Agora
+                  </GradientButton>
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                className="flex flex-col items-center gap-4 w-full"
+                variants={variants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                transition={{ duration: 0.5 }}
+              >
+                {/* Título */}
+                <h1 className="text-2xl text-[28px] font-semibold text-center font-montserrat">
+                  Queremos que você experimente o FitLens{" "}
+                  <span className="bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold">
+                    gratuitamente!
+                  </span>
+                </h1>
+
+                <VideoCard background={Video1.src} />
+
+                <p className="text-2xl text-center font-light font-montserrat">
+                  ✅ Nenhum pagamento necessário agora
+                </p>
+
+                <div className="mt-4 w-full">
+                  <GradientButton>Teste Grátis</GradientButton>
+                </div>
+              </motion.div>
+            )}
           </AnimatePresence>
         </div>
       )}

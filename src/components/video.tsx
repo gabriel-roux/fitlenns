@@ -13,7 +13,6 @@ export function VideoCard({ background }: VideoCardProps) {
       className="w-full max-w-[384px] rounded-[20px] flex items-center justify-center bg-center p-4 bg-no-repeat border-0 mb-8"
     >
       <div className="relative w-full h-[400px] rounded-[20px] bg-center bg-no-repeat overflow-hidden">
-        <div className="absolute top-2 left-11 md:left-14 w-full max-w-[240px] h-[390px] overflow-hidden">
           <Image
             src={background}
             alt="Background"
@@ -21,7 +20,6 @@ export function VideoCard({ background }: VideoCardProps) {
             objectFit="contain"
             quality={100}
           />
-        </div>
         <Image
           src={Mockup}
           alt="Mockup"

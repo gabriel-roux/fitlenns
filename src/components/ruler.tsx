@@ -6,8 +6,8 @@ import { OptionCard } from "./option-card";
 export const SliderWithRuler = () => {
   const [value, setValue] = useState(164); // Valor inicial como número
   const [unit, setUnit] = useState("cm"); // Unidade inicial
-  const MAX = 264; // Valor máximo
-  const MIN = 55; // Valor mínimo
+  const MAX = 300; // Valor máximo
+  const MIN = 1; // Valor mínimo
   const STEP = 1;
 
   const rulerRef = useRef<HTMLDivElement>(null);

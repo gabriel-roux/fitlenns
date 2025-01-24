@@ -15,6 +15,7 @@ import { SliderWithRuler } from "@/components/ruler";
 import { SliderWithWeightRuler } from "@/components/weight-ruler";
 import { ImageCard } from "@/components/image";
 import { VideoCard } from "@/components/video";
+import { flowRules } from "@/assets/rules";
 
 interface Answer {
   [key: string]: string[]; // Todas as respostas são arrays para suportar múltiplas seleções
@@ -24,10 +25,35 @@ export default function Quiz() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Answer>({});
+  const [history, setHistory] = useState<number[]>([]); // Histórico de passos
   const totalSteps = quiz.length;
   const currentQuiz = quiz[currentStep];
 
-  // Função para avançar para a próxima etapa com debounce de 500ms
+  // Dentro do componente Quiz
+  const determineNextStep = useCallback(
+    (value?: string) => {
+      if (currentQuiz.title && flowRules[currentQuiz.title]) {
+        if (value) {
+          const mappedNextStep = flowRules[currentQuiz.title][value];
+          if (mappedNextStep !== undefined) {
+            return mappedNextStep;
+          }
+        } else {
+          const userAnswer = answers[currentQuiz.title]?.[0];
+          if (
+            userAnswer &&
+            flowRules[currentQuiz.title][userAnswer] !== undefined
+          ) {
+            return flowRules[currentQuiz.title][userAnswer];
+          }
+        }
+      }
+      return currentStep + 1;
+    },
+    [currentStep, currentQuiz.title, answers]
+  );
+
+  // Função para avançar para a próxima etapa com lógica de fluxo
   const handleNext = useCallback(() => {
     // Validação: Verifica se pelo menos uma opção foi selecionada
     if (currentQuiz.title) {
@@ -55,7 +81,12 @@ export default function Quiz() {
     }
 
     if (currentStep < totalSteps - 1) {
-      setCurrentStep(currentStep + 1);
+      const nextStep = determineNextStep();
+
+      // Atualizar o histórico de forma funcional para evitar bugs
+      setHistory((prevHistory) => [...prevHistory, currentStep]);
+
+      setCurrentStep(nextStep);
     } else {
       // Finalizar o quiz e navegar para a página de resultados
       localStorage.setItem("quizAnswers", JSON.stringify(answers));
@@ -68,50 +99,62 @@ export default function Quiz() {
     currentQuiz.title,
     currentQuiz.select,
     currentQuiz.options,
+    determineNextStep,
     router,
   ]);
 
+  // Função para lidar com mudanças em opções de radio
   const handleOptionChange = (value: string) => {
-    setAnswers({
-      ...answers,
+    setAnswers((prevAnswers) => ({
+      ...prevAnswers,
       [String(currentQuiz.title)]: [value],
-    });
+    }));
 
-    // Se 'options' existir, avançar automaticamente após 500ms
-    if (currentQuiz.options) {
-      setTimeout(() => {
-        if (value !== "others") setCurrentStep(currentStep + 1);
-      }, 200);
-    }
+    // Determinar o próximo passo com base no valor selecionado
+    const nextStep = determineNextStep(value);
+
+    // Atualizar o histórico de forma funcional para evitar bugs
+    setHistory((prevHistory) => [...prevHistory, currentStep]);
+
+    setTimeout(() => {
+      setCurrentStep(nextStep);
+    }, 200);
   };
 
+  // Função para lidar com mudanças em opções de checkbox
   const handleCheckboxChange = (value: string, checked: boolean) => {
     const title = currentQuiz.title;
-    const currentAnswers = answers[title!] || [];
-
-    if (checked) {
-      setAnswers({
-        ...answers,
-        [title!]: [...currentAnswers, value],
-      });
-    } else {
-      setAnswers({
-        ...answers,
-        [title!]: currentAnswers.filter((item) => item !== value),
-      });
-    }
+    setAnswers((prevAnswers) => {
+      const currentAnswers = prevAnswers[title!] || [];
+      if (checked) {
+        return {
+          ...prevAnswers,
+          [title!]: [...currentAnswers, value],
+        };
+      } else {
+        return {
+          ...prevAnswers,
+          [title!]: currentAnswers.filter((item) => item !== value),
+        };
+      }
+    });
   };
 
+  // Função para avançar manualmente (botão "Próximo")
   const handleManualNext = () => {
     handleNext();
   };
 
+  // Função para voltar ao passo anterior
   const handleBack = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
+    if (history.length > 0) {
+      const previousStep = history[history.length - 1];
+      setHistory((prevHistory) => prevHistory.slice(0, -1));
+      setCurrentStep(previousStep);
     }
   };
 
+  // Cálculo da barra de progresso baseado no índice atual
   const progressPercentage = ((currentStep + 1) / totalSteps) * 100;
 
   // Definição das variantes de animação
@@ -126,24 +169,24 @@ export default function Quiz() {
     currentQuiz.select || (!currentQuiz.select && !currentQuiz.options);
 
   return (
-    <div className="max-w-[595px] mx-auto py-4 px-4">
+    <div className="">
       {/* Barra de Progresso */}
-      <div className="w-full h-4 rounded-full bg-[#03C5F010] relative">
+      <div className="w-full h-4 rounded-full bg-[#03C5F010] relative max-w-[595px] mx-auto py-4 px-4">
         <div
           className="h-full rounded-full bg-azulGradient transition-all duration-300"
           style={{ width: `${progressPercentage}%` }}
         ></div>
       </div>
       {/* Texto de Progresso */}
-      <div className="w-full flex justify-start mt-2">
+      <div className="w-full flex justify-start mt-2 max-w-[595px] mx-auto py-4 px-4">
         <button
           className={`flex items-center gap-1 text-base md:text-lg font-semibold text-secondary font-montserrat ${
-            currentStep === 0
+            history.length === 0
               ? "opacity-50 cursor-not-allowed"
               : "hover:opacity-80"
           }`}
           onClick={handleBack}
-          disabled={currentStep === 0}
+          disabled={history.length === 0}
         >
           <Image
             src={ArrowBack}
@@ -155,8 +198,8 @@ export default function Quiz() {
           Voltar
         </button>
       </div>
-  
-      <div className="flex flex-col items-center justify-center gap-6 mt-3">
+
+      <div className="flex flex-col items-center justify-center gap-6 mt-3 max-w-[595px] mx-auto py-4 px-4">
         <Image
           src={FitLenns}
           alt="FitLenns"
@@ -190,7 +233,7 @@ export default function Quiz() {
             </motion.div>
           </AnimatePresence>
         </div>
-  
+
         {/* Pergunta e Opções com Animação */}
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
@@ -218,20 +261,35 @@ export default function Quiz() {
                 )}
               </div>
             )}
-  
+
             {currentQuiz.video && (
               <div className="w-full flex justify-center">
                 <VideoCard background={currentQuiz.video.src} />
               </div>
             )}
-            <p className="text-sm md:text-lg font-montserrat font-medium mb-4">
-              {currentQuiz.question}
-            </p>
-  
+            {currentQuiz.question && (
+              <p className="text-sm md:text-lg font-montserrat font-medium mb-4">
+                {currentQuiz.question}
+              </p>
+            )}
+
             {currentQuiz.useRuler && <SliderWithRuler />}
-  
-            {currentQuiz.useWeightRuler && <SliderWithWeightRuler />}
-  
+
+            {currentQuiz.useWeightRuler && (
+              <SliderWithWeightRuler
+                lastValue={Number(answers[quiz[currentStep - 1].title!])}
+                onValueChange={(value) => {
+                  setAnswers((prevAnswers) => ({
+                    ...prevAnswers,
+                    [currentQuiz.title!]: (value as unknown) as string[],
+                  }));
+                }}
+                targetWeight={
+                  Number(answers[quiz[currentStep - 1].title!]?.[0]) || 0
+                }
+              />
+            )}
+
             {/* Opções de Checkbox */}
             {currentQuiz.select && (
               <div
@@ -258,7 +316,7 @@ export default function Quiz() {
                 ))}
               </div>
             )}
-  
+
             {/* Opções de Radio */}
             {currentQuiz.options && (
               <RadioGroup.Root
@@ -289,8 +347,21 @@ export default function Quiz() {
             )}
           </motion.div>
         </AnimatePresence>
-  
-        {/* Botão Próximo Condicional */}
+      </div>
+
+      {currentQuiz.coveredImage && (
+        <Image
+          src={currentQuiz.coveredImage.src}
+          alt="Covered Image"
+          quality={100}
+          width={currentQuiz.coveredImage.width}
+          height={currentQuiz.coveredImage.height}
+          className="w-full mb-20"
+        />
+      )}
+
+      {/* Botão Próximo Condicional */}
+      <div className="w-full max-w-[595px] mx-auto py-4 px-4">
         {shouldShowButton && (
           <GradientButton onClick={handleManualNext}>
             {currentStep < totalSteps - 1
