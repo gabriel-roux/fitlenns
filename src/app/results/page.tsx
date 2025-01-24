@@ -174,7 +174,11 @@ export default function ResultPage() {
                 </p>
 
                 <div className="mt-4 w-full">
-                  <GradientButton>Teste Grátis</GradientButton>
+                  <GradientButton
+                    onClick={() => {
+                      window.location.href = "https://pay.oasispay.co/9GBPP8"
+                    }}
+                  >Teste Grátis</GradientButton>
                 </div>
               </motion.div>
             )}

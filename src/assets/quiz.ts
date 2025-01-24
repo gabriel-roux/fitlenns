@@ -36,10 +36,6 @@ export const quiz = [
       "Nossa inteligência artificial cuidará do restante, garantindo <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>precisão e eficiência</span> no <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>rastreamento de suas calorias.</span>",
     video: Video4,
   },
-  // {
-  //   title: 'Acompanhe seu progresso conforme avança',
-  //   description: "Monitore <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>cada etapa da sua jornada</span> com insights detalhados e motivação contínua.",
-  // },
   {
     title: "Quase lá!",
     description:
