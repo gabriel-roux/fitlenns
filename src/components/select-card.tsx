@@ -18,7 +18,7 @@ export function CheckboxCard({
   onChange,
 }: CheckboxCardProps) {
   return (
-    <div className="relative p-[2px] rounded-lg w-full">
+    <button id={value} className="relative p-[2px] rounded-lg w-full">
       {/* Camada de borda gradient */}
       <div
         className={`
@@ -102,6 +102,6 @@ export function CheckboxCard({
           {option}
         </label>
       </div>
-    </div>
+    </button>
   );
 }

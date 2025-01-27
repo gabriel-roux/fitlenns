@@ -12,7 +12,7 @@ export function OptionCard({
   option,
 }: OptionCardProps) {
   return (
-    <div className="relative p-[2px] rounded-lg w-full">
+    <button id={value} className="relative p-[2px] rounded-lg w-full">
       {/* Camada de borda gradient */}
       <div
         className={`
@@ -36,6 +36,7 @@ export function OptionCard({
           border-transparent
           transition-all duration-300
         `}
+        id={value}
       >
         <RadioGroup.Item
           value={value}
@@ -81,6 +82,6 @@ export function OptionCard({
           {option}
         </label>
       </div>
-    </div>
+    </button>
   );
 }
