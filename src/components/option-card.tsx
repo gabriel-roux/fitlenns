@@ -58,8 +58,9 @@ export function OptionCard({
           `}
         >
           {/* Camada interna para simular o fundo branco */}
-          <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
+          <div  id={value} className="w-full h-full bg-white rounded-full flex items-center justify-center">
             <RadioGroup.Indicator
+              id={value}
               className={`
                 w-2.5 h-2.5 sm:w-3 sm:h-3
                 rounded-full

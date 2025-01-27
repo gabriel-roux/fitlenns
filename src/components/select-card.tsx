@@ -68,10 +68,11 @@ export function CheckboxCard({
           `}
         >
           {/* Camada interna para simular o fundo branco */}
-          <div className="w-full h-full bg-white rounded-sm flex items-center justify-center">
-            <AnimatePresence>
+          <div  id={value} className="w-full h-full bg-white rounded-sm flex items-center justify-center">
+            <AnimatePresence  id={value}>
               {selected && (
                 <motion.div
+                id={value}
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   exit={{ scale: 0 }}
