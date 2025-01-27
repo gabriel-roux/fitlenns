@@ -88,8 +88,7 @@ export function CheckboxCard({
             </AnimatePresence>
           </div>
         </Checkbox.Root>
-        <label
-          htmlFor={value}
+        <p
           className={`
             text-base sm:text-lg lg:text-xl
             font-montserrat font-semibold 
@@ -100,7 +99,7 @@ export function CheckboxCard({
           `}
         >
           {option}
-        </label>
+        </p>
       </div>
     </button>
   );

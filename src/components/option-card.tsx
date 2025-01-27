@@ -68,8 +68,7 @@ export function OptionCard({
             />
           </div>
         </RadioGroup.Item>
-        <label
-          htmlFor={value}
+        <p
           className={`
             text-base sm:text-lg lg:text-xl
             font-montserrat font-semibold 
@@ -80,7 +79,7 @@ export function OptionCard({
           `}
         >
           {option}
-        </label>
+        </p>
       </div>
     </button>
   );
