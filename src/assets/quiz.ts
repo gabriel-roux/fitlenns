@@ -1,41 +1,34 @@
-import PratoVerduras from "@/assets/verduras-prato.png";
+import Feedback from "@/assets/feedback.png";
 import MulherComPrato from "@/assets/mulher-com-prato.png";
 import AlimentosAlergicos from "@/assets/proibido-alimentos.png";
-import Feedback from "@/assets/feedback.png";
+import PratoVerduras from "@/assets/verduras-prato.png";
 import Video1 from "@/assets/videos/video1.gif";
-import Video2 from "@/assets/videos/video2.gif";
-import Video3 from "@/assets/videos/video3.gif";
-import Video4 from "@/assets/videos/video4.gif";
 import Video5 from "@/assets/videos/video5.gif";
-import ConfiraBg from "@/assets/confira-bg.png";
-import ChartBg from "@/assets/chart-bg.png";
 
 export const quiz = [
   {
-    title: "Alcance o corpo dos seus sonhos sem esforço!",
-    description:
-      "<span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>FitLens AI</span> reconhece instantaneamente sua comida e monitora calorias, com apenas uma foto voce pode ganhar ou perder peso com precisão e rapidez.",
+    title: "Alcance o corpo dos seus sonhos sem esforço com Inteligência Artificial do FitLens!",
     loadQuiz: true,
     video: Video1,
   },
-  {
-    title: "Facilite o rastreamento de calorias com IA",
-    description:
-      "Acompanhe suas <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>metas de peso</span> com precisão e simplicidade, alimentadas por <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>inteligência artificial</span>.",
-    video: Video2,
-  },
-  {
-    title: "Basta tirar uma foto da sua comida",
-    description:
-      "Deixe que a inteligência artificial <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>identifique e registre</span> automaticamente <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>suas refeições</span>.",
-    video: Video3,
-  },
-  {
-    title: "Então deixe o resto com a gente",
-    description:
-      "Nossa inteligência artificial cuidará do restante, garantindo <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>precisão e eficiência</span> no <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>rastreamento de suas calorias.</span>",
-    video: Video4,
-  },
+  // {
+  //   title: "Facilite o rastreamento de calorias com IA",
+  //   description:
+  //     "Acompanhe suas <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>metas de peso</span> com precisão e simplicidade, alimentadas por <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>inteligência artificial</span>.",
+  //   video: Video2,
+  // },
+  // {
+  //   title: "Basta tirar uma foto da sua comida",
+  //   description:
+  //     "Deixe que a inteligência artificial <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>identifique e registre</span> automaticamente <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>suas refeições</span>.",
+  //   video: Video3,
+  // },
+  // {
+  //   title: "Então deixe o resto com a gente",
+  //   description:
+  //     "Nossa inteligência artificial cuidará do restante, garantindo <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>precisão e eficiência</span> no <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>rastreamento de suas calorias.</span>",
+  //   video: Video4,
+  // },
   {
     title: "Quase lá!",
     description:
@@ -333,7 +326,7 @@ export const quiz = [
     title: "Confira isso!",
     description:
       "O Fit Lens <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>calcula e organiza</span> todas as calorias e nutrientes que você consome <span class='bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent font-semibold'>ao longo do dia!</span>",
-    coveredImage: ConfiraBg,
+    isConfiraBg: true,
   },
   {
     title: "Qual é o seu nível de atividade física?",
@@ -416,7 +409,7 @@ export const quiz = [
   {
     title:
       "Com o Fit Lens, você pode acompanhar seu progresso com gráficos e relatórios.",
-    coveredImage: ChartBg,
+    isChartBg: true,
   },
   {
     title: "Qual é a sua idade?",

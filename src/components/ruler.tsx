@@ -1,13 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useRef, useEffect } from "react";
 import * as Radio from "@radix-ui/react-radio-group";
+import { useEffect, useRef, useState } from "react";
 import { OptionCard } from "./option-card";
 
 export const SliderWithRuler = () => {
-  const [value, setValue] = useState(164); // Valor inicial como número
-  const [unit, setUnit] = useState("cm"); // Unidade inicial
-  const MAX = 300; // Valor máximo
-  const MIN = 1; // Valor mínimo
+  const [value, setValue] = useState(164);
+  const [unit, setUnit] = useState("cm");
+  const MAX = 300;
+  const MIN = 1;
   const STEP = 1;
 
   const rulerRef = useRef<HTMLDivElement>(null);
@@ -15,42 +14,41 @@ export const SliderWithRuler = () => {
   const startX = useRef(0);
   const startValue = useRef(value);
 
-  // Função para lidar com o início do arrasto
+  const damping = 0.15;
+
   const handleMouseDown = (e: any) => {
     isDragging.current = true;
     startX.current = e.clientX || (e.touches && e.touches[0].clientX);
     startValue.current = value;
-    // Evitar seleção de texto durante o arrasto
     e.preventDefault();
   };
 
-  // Função para lidar com o movimento do mouse durante o arrasto
   const handleMouseMove = (e: any) => {
     if (!isDragging.current) return;
 
     const clientX = e.clientX !== undefined ? e.clientX : e.touches[0].clientX;
-    const deltaX = clientX - startX.current;
+    const deltaX = startX.current - clientX;
 
     const rulerWidth = rulerRef?.current?.offsetWidth || 0;
     const totalSteps = MAX - MIN;
     const stepPerPixel = totalSteps / rulerWidth;
 
-    let newValue = startValue.current + deltaX * stepPerPixel;
-    newValue = Math.round(newValue / STEP) * STEP; // Ajustar para o STEP mais próximo
+    const smoothDelta = deltaX * damping;
+    let newValue = startValue.current + smoothDelta * stepPerPixel;
+    newValue = Math.round(newValue / STEP) * STEP;
 
-    // Garantir que o valor esteja dentro dos limites
     if (newValue < MIN) newValue = MIN;
     if (newValue > MAX) newValue = MAX;
 
-    setValue(newValue);
+    window.requestAnimationFrame(() => {
+      setValue(newValue);
+    });
   };
 
-  // Função para lidar com o término do arrasto
   const handleMouseUp = () => {
     isDragging.current = false;
   };
 
-  // Adicionar event listeners para mouse e touch
   useEffect(() => {
     const handleMove = (e: any) => handleMouseMove(e);
     const handleUp = () => handleMouseUp();
@@ -68,20 +66,18 @@ export const SliderWithRuler = () => {
     };
   }, [value]);
 
-  // Função para renderizar os ticks com base no valor atual
   const renderTicks = () => {
     const ticks = [];
-    const visibleRange = 10; // Quantos ticks mostrar de cada lado
-    const start = Math.max(MIN, value - visibleRange);
-    const end = Math.min(MAX, value + visibleRange);
+    const visibleRange = 10;
+    const start = value - visibleRange;
+    const end = value + visibleRange;
 
     for (let i = start; i <= end; i += STEP) {
       const positionInCycle = (i - MIN) % 7;
-      const isMajor = positionInCycle === 2 || positionInCycle === 6; // 3º e 7º ticks são maiores
-      const isLabeled = isMajor; // Somente os ticks maiores recebem legenda
+      const isMajor = positionInCycle === 2 || positionInCycle === 6;
+      const isLabeled = isMajor;
 
-      // Calcula a posição relativa do tick em relação ao valor atual
-      const relativePosition = (i - value) * 25; // Ajuste o multiplicador conforme necessário
+      const relativePosition = (i - value) * 25;
 
       ticks.push(
         <div
@@ -91,29 +87,27 @@ export const SliderWithRuler = () => {
             flexDirection: "column",
             alignItems: "center",
             width: "3.16px",
-            height: isMajor ? "87px" : "44px", // Traço grande ou pequeno
+            height: isMajor ? "87px" : "44px",
             borderRadius: "4px",
             backgroundColor: "#DCF5FC",
             position: "absolute",
             left: "50%",
             transform: `translateX(${relativePosition}px)`,
-            transition: "transform 0.1s linear",
+            transition: "transform 0.2s ease-out",
           }}
         >
-          {/* Linha do tick */}
           <div
             style={{
               width: "100%",
               height: "100%",
               backgroundColor: "#DCF5FC",
             }}
-          ></div>
-          {/* Legenda do tick */}
+          />
           {isLabeled && (
             <span
               style={{
                 position: "absolute",
-                bottom: "-48px", // Posição da legenda
+                bottom: "-48px",
                 fontSize: "12px",
                 color: "#D1D1D1",
               }}
@@ -129,19 +123,16 @@ export const SliderWithRuler = () => {
 
   return (
     <div style={{ textAlign: "center", userSelect: "none" }}>
-      {/* Seleção da unidade */}
       <Radio.Root
         value={unit}
         onValueChange={(val) => {
           setUnit(val);
 
-          // Ajustar o valor para a nova unidade
           setValue((prev) => {
             if (val === "cm") {
               return Math.round((prev - 22) * 2.54);
-            } else {
-              return Math.round(prev / 2.54) + 22;
             }
+            return Math.round(prev / 2.54) + 22;
           });
         }}
         className="flex justify-center gap-4 items-center scale-75 mb-6"
@@ -150,15 +141,19 @@ export const SliderWithRuler = () => {
         <OptionCard option="pol" value="pol" selected={unit === "pol"} />
       </Radio.Root>
 
-      {/* Exibição do valor atual */}
       <h3 className="text-4xl font-montserrat font-semibold text-black mb-8">
-        {value}
+        <span
+          style={{
+            transition: "all 0.2s ease-out", // Suaviza a transição do valor
+          }}
+        >
+          {value}
+        </span>
         <span className="uppercase text-xl font-montserrat text-[#D1D1D1]">
           {unit}
         </span>
       </h3>
 
-      {/* Ruler com ticks */}
       <div
         ref={rulerRef}
         onMouseDown={handleMouseDown}
@@ -166,7 +161,7 @@ export const SliderWithRuler = () => {
         style={{
           position: "relative",
           width: "100%",
-          height: "150px", // Ajuste conforme necessário
+          height: "150px",
           display: "flex",
           justifyContent: "center",
           alignItems: "flex-end",
@@ -174,7 +169,6 @@ export const SliderWithRuler = () => {
           overflow: "hidden",
         }}
       >
-        {/* Container dos ticks */}
         <div
           style={{
             position: "relative",
@@ -182,19 +176,18 @@ export const SliderWithRuler = () => {
             alignItems: "center",
             height: "100%",
             width: "max-content",
-            transform: "translateX(0)", // Inicialmente centralizado
+            transform: "translateX(0)",
           }}
         >
           {renderTicks()}
         </div>
 
-        {/* Tick central fixo */}
         <div
           style={{
             position: "absolute",
             top: "25px",
             left: "50%",
-            transform: "translateX(-1.5px)", // Metade da largura do tick
+            transform: "translateX(-1.5px)",
             width: "3px",
             height: "100px",
             zIndex: 10,
@@ -203,8 +196,9 @@ export const SliderWithRuler = () => {
         />
       </div>
 
-      {/* Instrução para o usuário */}
-      <p className="mt-10 text-[#03C5F090] font-montserrat font-semibold text-sm">Arraste para ajustar</p>
+      <p className="mt-10 text-[#03C5F090] font-montserrat font-semibold text-sm">
+        Arraste para ajustar
+      </p>
     </div>
   );
 };

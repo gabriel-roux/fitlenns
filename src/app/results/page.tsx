@@ -1,21 +1,32 @@
 "use client";
 
-import Image from "next/image";
 import FitLenns from "@/assets/fitlens-logo.svg";
-import { ClipLoader } from "react-spinners";
 import Frigideira from "@/assets/frigideira.gif";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
-import { Card } from "@/components/card";
-import { GradientButton } from "@/components/button";
-import { VideoCard } from "@/components/video";
 import Video1 from "@/assets/videos/video1.gif";
+import { GradientButton } from "@/components/button";
+import { Card } from "@/components/card";
+import { VideoCard } from "@/components/video";
+import { items } from "@/utils/animated-list-items";
+import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { ClipLoader } from "react-spinners";
 
 export default function ResultPage() {
   const [gotoPitch, setGotoPitch] = useState(false);
   const [gotoCheckout, setGotoCheckout] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   const router = useRouter();
+  
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % items.length);
+      }, 1500); 
+  
+      return () => clearInterval(interval);
+    }, [items.length]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -28,7 +39,7 @@ export default function ResultPage() {
       }
 
       setGotoPitch(true);
-    }, 4000);
+    }, 6000);
   }, []);
 
   // Definição das variantes de animação
@@ -42,7 +53,7 @@ export default function ResultPage() {
     <div className="max-w-[595px] mx-auto py-4 px-4">
       {gotoPitch && (
         <div className="w-full h-4 rounded-full bg-[#03C5F010] relative">
-          <div className="w-full h-full rounded-full bg-azulGradient transition-all duration-300"></div>
+          <div className="w-full h-full rounded-full bg-azulGradient transition-all duration-300" />
         </div>
       )}
 
@@ -61,8 +72,6 @@ export default function ResultPage() {
           <Image
             src={Frigideira}
             alt="Frigideira"
-            width={120}
-            height={150}
             className="w-[120px] h-[150px]"
           />
 
@@ -70,28 +79,26 @@ export default function ResultPage() {
             Processando seus resultados...
           </h1>
 
-          <ul className="flex flex-col items-center justify-center gap-4 list-none">
-            <li className="flex items-center gap-2 text-secondary text-lg">
-              <ClipLoader color="#27CDC0" size={18} />
-              Estabelecendo seus novos hábitos saudáveis
-            </li>
-            <li className="flex items-center gap-2 text-secondary text-lg">
-              <ClipLoader color="#27CDC0" size={18} />
-              Escolhendo as melhores receitas para você
-            </li>
-            <li className="flex items-center gap-2 text-secondary text-lg">
-              <ClipLoader color="#27CDC0" size={18} />
-              Criando seu plano de controle de peso
-            </li>
-            <li className="flex items-center gap-2 text-secondary text-lg">
-              <ClipLoader color="#27CDC0" size={18} />
-              Examinando seus padrões alimentares
-            </li>
-            <li className="flex items-center gap-2 text-secondary text-lg">
-              <ClipLoader color="#27CDC0" size={18} />
-              Avaliando sua saúde atual
-            </li>
-          </ul>
+          <div className="flex flex-col items-center justify-center gap-4 list-none">
+            <AnimatePresence mode="wait">
+              <motion.li
+                key={items[currentIndex]}
+                className="flex items-center gap-2 text-secondary text-lg"
+                initial={{ opacity: 0 }}    
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                  <ClipLoader
+                    color="#27CDC0"
+                    size={18} 
+                    aria-label="Carregando..."
+                    data-testid="loader"
+                  />
+                {items[currentIndex]}
+              </motion.li>
+            </AnimatePresence>
+          </div>
         </div>
       ) : (
         <div className="flex flex-col items-center gap-4 w-full min-h-[100px]">

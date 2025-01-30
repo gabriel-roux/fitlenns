@@ -2,7 +2,7 @@
 
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { CheckIcon } from "@radix-ui/react-icons";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface CheckboxCardProps {
   option: string;
@@ -18,7 +18,7 @@ export function CheckboxCard({
   onChange,
 }: CheckboxCardProps) {
   return (
-    <button id={value} className="relative p-[2px] rounded-lg w-full">
+    <button id={value} type="button" className="relative p-[2px] rounded-lg w-full">
       {/* Camada de borda gradient */}
       <div
         className={`
@@ -26,7 +26,7 @@ export function CheckboxCard({
           ${selected ? "opacity-100" : "opacity-20"}
           pointer-events-none
         `}
-      ></div>
+      />
 
       {/* Conteúdo interno */}
       <div

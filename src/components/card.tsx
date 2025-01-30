@@ -17,7 +17,7 @@ export function Card({
           absolute inset-0 rounded-2xl bg-gradient-to-b from-azul-start to-azul-end transition-all duration-300
           pointer-events-none
         `}
-      ></div>
+      />
 
       {/* Conteúdo interno */}
       <div
@@ -38,7 +38,7 @@ export function Card({
       >
         {/* Título responsivo */}
         <h2
-          className={`text-xl sm:text-2xl lg:text-3xl font-montserrat font-semibold leading-7 sm:leading-8 lg:leading-9 text-black text-center`}
+          className="text-xl sm:text-2xl lg:text-3xl font-montserrat font-semibold leading-7 sm:leading-8 lg:leading-9 text-black text-center"
         >
           {title}
         </h2>
