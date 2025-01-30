@@ -75,7 +75,8 @@ export function OptionCard({
           <p
             className={`
               text-base sm:text-lg lg:text-xl
-              font-montserrat font-semibold 
+              font-montserrat font-semibold
+              text-left 
               leading-6 sm:leading-8
               ${selected
                 ? "bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent"

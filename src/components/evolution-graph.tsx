@@ -62,9 +62,9 @@ export function EvolutionGraph() {
               <ReferenceDot x={60} y={50} r={6} fill="#fff" />
               <defs>
                 <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" style={{ stopColor: '#FF0000', stopOpacity: 1 }} />
-                  <stop offset="50%" style={{ stopColor: '#FFFF00', stopOpacity: 1 }} />
-                  <stop offset="100%" style={{ stopColor: '#32CD32', stopOpacity: 1 }} />
+                  <stop offset="0%" style={{ stopColor: '#FF0000', stopOpacity: 0.5 }} />
+                  <stop offset="50%" style={{ stopColor: '#FFFF00', stopOpacity: 0.5 }} />
+                  <stop offset="100%" style={{ stopColor: '#32CD32', stopOpacity: 0.5 }} />
                 </linearGradient>
               </defs>
             </AreaChart>

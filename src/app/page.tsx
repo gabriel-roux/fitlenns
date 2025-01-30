@@ -200,7 +200,7 @@ export default function Quiz() {
 			</div>
 
 			<div className="flex flex-col items-center justify-center gap-6 max-w-[595px] mx-auto py-4 px-4">
-				<Image src={FitLenns} alt="FitLenns" className="w-24 h-12" />
+				<Image src={FitLenns} alt="FitLenns" className="w-32 h-16" />
 				<div className="flex flex-col items-center gap-4 w-full min-h-[100px]">
 					{/* Conteúdo Dinâmico com Animação */}
 					<AnimatePresence mode="wait" initial={false}>
