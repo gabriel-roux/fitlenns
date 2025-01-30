@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as Radio from "@radix-ui/react-radio-group";
 import React, { useEffect, useRef, useState } from "react";
 import { OptionCard } from "./option-card";
