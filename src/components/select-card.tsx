@@ -1,8 +1,8 @@
 "use client";
-
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { CheckIcon } from "@radix-ui/react-icons";
 import { AnimatePresence, motion } from "framer-motion";
+import { useRef } from "react";
 
 interface CheckboxCardProps {
   option: string;
@@ -17,8 +17,21 @@ export function CheckboxCard({
   option,
   onChange,
 }: CheckboxCardProps) {
+  const checkboxRef = useRef<HTMLButtonElement>(null);
+
+  const handleButtonClick = (e: React.MouseEvent) => {
+    // Prevenir toggle duplo se o clique foi no próprio checkbox
+    if (checkboxRef.current?.contains(e.target as Node)) return;
+    onChange?.(value, !selected);
+  };
+
   return (
-    <button id={value} type="button" className="relative p-[2px] rounded-lg w-full">
+    <button
+      id={value}
+      type="button"
+      className="relative p-[2px] rounded-lg w-full"
+      onClick={handleButtonClick}
+    >
       {/* Camada de borda gradient */}
       <div
         className={`
@@ -44,13 +57,10 @@ export function CheckboxCard({
         `}
       >
         <Checkbox.Root
+          ref={checkboxRef}
           id={value}
           checked={selected}
-          onCheckedChange={(checked) => {
-            if (onChange) {
-              onChange(value, checked as boolean);
-            }
-          }}
+          onCheckedChange={(checked) => onChange?.(value, checked as boolean)}
           className={`
             relative
             w-5 h-5 sm:w-6 sm:h-6
@@ -68,11 +78,10 @@ export function CheckboxCard({
           `}
         >
           {/* Camada interna para simular o fundo branco */}
-          <div  id={value} className="w-full h-full bg-white rounded-sm flex items-center justify-center">
+          <div className="w-full h-full bg-white rounded-sm flex items-center justify-center">
             <AnimatePresence>
               {selected && (
                 <motion.div
-                id={value}
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   exit={{ scale: 0 }}
@@ -94,9 +103,11 @@ export function CheckboxCard({
             text-base sm:text-lg lg:text-xl
             font-montserrat font-semibold 
             leading-6 sm:leading-8
-            ${selected
-              ? "bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent"
-              : "text-secondary"}
+            ${
+              selected
+                ? "bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent"
+                : "text-secondary"
+            }
           `}
         >
           {option}
