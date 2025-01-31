@@ -17,7 +17,7 @@ export function OptionCard({
       asChild
       className="relative p-[2px] rounded-lg w-full focus:outline-none"
     >
-      <button type="button" className="w-full">
+      <button type="button" id={value} className="w-full">
         {/* Camada de borda gradient */}
         <div
           className={`
