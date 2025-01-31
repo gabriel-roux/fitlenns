@@ -13,12 +13,12 @@ export function OptionCard({
 }: OptionCardProps) {
   return (
     <RadioGroup.Item
-      value={value}
       id={value}
+      value={value}
       asChild
       className="relative p-[2px] rounded-lg w-full focus:outline-none"
     >
-      <button type="button" className="w-full">
+      <button id={value} type="button" className="w-full">
         {/* Camada de borda gradient */}
         <div
           className={`
@@ -45,6 +45,7 @@ export function OptionCard({
         >
           {/* Ícone do Radio */}
           <div
+            id={value}
             className={`
               relative
               w-5 h-5 sm:w-6 sm:h-6
