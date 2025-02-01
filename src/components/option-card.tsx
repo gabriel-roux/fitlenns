@@ -1,4 +1,5 @@
 import * as RadioGroup from "@radix-ui/react-radio-group";
+import { useRef } from "react";
 
 interface OptionCardProps {
   option: string;
@@ -11,8 +12,19 @@ export function OptionCard({
   value,
   option,
 }: OptionCardProps) {
+  const radioItemRef = useRef<HTMLButtonElement>(null);
+
+  const handleButtonClick = () => {
+    radioItemRef.current?.click();
+  };
+
   return (
-    <button id={value} type="button" className="relative p-[2px] rounded-lg w-full">
+    <button
+      id={value}
+      type="button"
+      className="relative p-[2px] rounded-lg w-full"
+      onClick={handleButtonClick}
+    >
       {/* Camada de borda gradient */}
       <div
         className={`
@@ -39,6 +51,7 @@ export function OptionCard({
         id={value}
       >
         <RadioGroup.Item
+          ref={radioItemRef}
           value={value}
           id={value}
           className={`
@@ -58,9 +71,8 @@ export function OptionCard({
           `}
         >
           {/* Camada interna para simular o fundo branco */}
-          <div  id={value} className="w-full h-full bg-white rounded-full flex items-center justify-center">
+          <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
             <RadioGroup.Indicator
-              id={value}
               className={`
                 w-2.5 h-2.5 sm:w-3 sm:h-3
                 rounded-full
@@ -72,11 +84,13 @@ export function OptionCard({
         <p
           className={`
             text-base sm:text-lg lg:text-xl
-            font-montserrat font-semibold 
+            font-montserrat font-semibold text-left 
             leading-6 sm:leading-8
-            ${selected
-              ? "bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent"
-              : "text-secondary"}
+            ${
+              selected
+                ? "bg-gradient-to-r from-azul-start to-azul-end bg-clip-text text-transparent"
+                : "text-secondary"
+            }
           `}
         >
           {option}
