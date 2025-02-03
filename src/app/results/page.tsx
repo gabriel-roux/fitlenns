@@ -185,7 +185,7 @@ export default function ResultPage() {
                   <GradientButton
                     id="final-2"
                     onClick={() => {
-                      window.location.href = "https://pay.venuzpay.com/checkout/cm6imxyvy006kda6wf9il7not?offer=V5IFTDM"
+                      window.location.href = "https://pay.venuzpay.com/checkout/cm6oyzmhh1qj7w0l0jvsmuryh?offer=3D6IDGZ"
                     }}
                   >Teste Grátis</GradientButton>
                 </div>
